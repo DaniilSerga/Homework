@@ -4,11 +4,49 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Homework.MVVM.View"
+      xmlns:vm="clr-namespace:Homework.MVVM.ViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="520" d:DesignWidth="828"
       Title="Menu">
 
+    <Page.DataContext>
+        <vm:MenuVM/>
+    </Page.DataContext>
+    
     <Grid>
-        
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Height="300" Width="500" CornerRadius="5">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF81FF7E" Offset="1"/>
+                    <GradientStop Color="#FF55FF50" Offset="0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Ваш счёт" HorizontalAlignment="Center" Foreground="Black" FontFamily="Sitka Small" FontSize="24"/>
+
+                <StackPanel Orientation="Vertical" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Баланс:" FontSize="20" />
+                        <TextBlock Text="{Binding Balance}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Баланс:" FontSize="20" />
+                        <TextBlock Text="{}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Баланс:" FontSize="20" />
+                        <TextBlock Text="{}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Page>
