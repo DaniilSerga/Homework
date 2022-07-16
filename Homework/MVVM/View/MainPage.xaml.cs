@@ -40,7 +40,9 @@ namespace Homework.MVVM.View
         {
             Dispatcher.Invoke(DispatcherPriority.Render, (ThreadStart)delegate
             {
-                MainMenu.Navigate(new Menu());
+                MainMenuFrame.Navigate(new Menu());
+                TransactionsFrame.Navigate(new Transactions());
+                BankStatementFrame.Navigate(new BankStatement());
             });
         }
     }
