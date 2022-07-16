@@ -12,7 +12,7 @@ namespace Homework.MVVM.ViewModel
     internal class MenuVM : INotifyPropertyChanged
     {
         private decimal _balance = Wallet.GetCurrentBalance();
-        private DateTime _recentBalanceRefresh;
+        private DateTime _recentBalanceRefresh = Wallet.GetRecentBalanceRefresh();
 
         public decimal Balance
         {
@@ -34,11 +34,12 @@ namespace Homework.MVVM.ViewModel
             }
         }
 
-
+        #region INotifyPropertyChanged realization
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+        #endregion
     }
 }

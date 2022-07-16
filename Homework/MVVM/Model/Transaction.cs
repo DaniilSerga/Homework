@@ -1,63 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace Homework.MVVM.Model
 {
     public class Transaction : INotifyPropertyChanged
     {
-        private DateTime _transactionDate;
-        private decimal _transactionAmount;
-        private string _operation;
-        private string _status;
+        private static SqlConnection _sqlConnection = Connection.GetConnection();
 
-        public DateTime TransactionDate
+        // Withdraws money from account
+        public static void Withdraw(decimal amount)
         {
-            get => _transactionDate;
-            set
+            if (_sqlConnection.State is ConnectionState.Closed)
             {
-                _transactionDate = value;
-                OnPropertyChanged("TransactionDate");
+                _sqlConnection.Open();
+            }
+
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionsDate, @Amount, @Operation)", _sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@TransactionDate", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("@Amount", amount);
+                sqlCommand.Parameters.AddWithValue("@Operation", "Withdraw");
+
+                sqlCommand.ExecuteNonQuery();
+
+                MessageBox.Show($"Деньги в размере {amount}р. были успешно сняты со счёта!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
             }
         }
 
-        public decimal TransactionAmount
+        // Puts money in account
+        public static void Put(decimal amount)
         {
-            get => _transactionAmount;
-            set
+            if (_sqlConnection.State is ConnectionState.Closed)
             {
-                _transactionAmount = value;
-                OnPropertyChanged("TransactionAmount");
+                _sqlConnection.Open();
             }
-        }
 
-        public string Operation
-        {
-            get => _operation;
-            set
+            try
             {
-                _operation = value;
-                OnPropertyChanged("Operation");
-            }
-        }
+                SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionsDate, @Amount, @Operation)", _sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@TransactionDate", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("@Amount", amount);
+                sqlCommand.Parameters.AddWithValue("@Operation", "Put");
 
-        public string Status
-        {
-            get => _status;
-            set
+                sqlCommand.ExecuteNonQuery();
+
+                MessageBox.Show($"Деньги в размере {amount}р. были успешно положены на счёт!");
+            }
+            catch (Exception ex)
             {
-                _status = value;
-                OnPropertyChanged("Status");
+                MessageBox.Show(ex.Message);
             }
-        }
-
-        public Transaction(DateTime transactionDate, decimal transactionAmount, string operation, string status)
-        {
-            _transactionDate = transactionDate;
-            _transactionAmount = transactionAmount;
-            _operation = operation;
-            _status = status;
+            finally
+            {
+                _sqlConnection.Close();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

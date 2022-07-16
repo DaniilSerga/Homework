@@ -13,7 +13,7 @@ namespace Homework.MVVM.Model
 {
     internal class Wallet : INotifyPropertyChanged
     {
-        private static SqlConnection _sqlConnection = Connection.SqlConnection;
+        private static readonly SqlConnection _sqlConnection = Connection.SqlConnection;
 
         // TODO Gets current balance
         public static decimal GetCurrentBalance()
@@ -32,7 +32,6 @@ namespace Homework.MVVM.Model
                 SqlDataReader dataReader = sqlCommand.ExecuteReader();
 
                 balance = dataReader.GetDecimal(0);
-                
             }
             catch (Exception ex)
             {
@@ -43,10 +42,42 @@ namespace Homework.MVVM.Model
             return balance;
         }
 
+        // Gets recent balance refresh date and time
+        public static DateTime GetRecentBalanceRefresh()
+        {
+            if (_sqlConnection.State is ConnectionState.Closed)
+            {
+                _sqlConnection.Open();
+            }
+
+            DateTime recentBalanceRefresh = new();
+
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("SELECT RefreshDate FROM Wallet ORDER BY RefreshDate DESC", _sqlConnection);
+
+                SqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                recentBalanceRefresh = dataReader.GetDateTime(0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
+            return recentBalanceRefresh;
+        }
+
+        #region INotifyPropertyChanged realization
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+        #endregion
     }
 }
