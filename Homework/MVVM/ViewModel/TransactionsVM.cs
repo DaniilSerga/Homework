@@ -1,4 +1,5 @@
-﻿using Homework.MVVM.Model;
+﻿using Azure;
+using Homework.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,15 +7,17 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Homework.MVVM.ViewModel
 {
     internal class TransactionsVM : INotifyPropertyChanged
     {
-        private DateTime _transactionDate;
-        private decimal _transactionAmount;
-        private string _operation;
+        private static DateTime _transactionDate;
+        private static decimal _transactionAmount;
+        private static int _operation;
+        private static string _commentary;
 
         public DateTime TransactionDate
         {
@@ -35,8 +38,8 @@ namespace Homework.MVVM.ViewModel
                 OnPropertyChanged("TransactionAmount");
             }
         }
-        
-        public string Operation
+
+        public int Operation
         {
             get => _operation;
             set
@@ -46,17 +49,40 @@ namespace Homework.MVVM.ViewModel
             }
         }
 
-        public ICommand PutCommand { get; }
-        public ICommand WithdrawCommand { get; }
-
-        // TODO Fix Commands
-        public TransactionsVM()
+        public string Commentary
         {
-            PutCommand = new RelayCommand(_ => Put());
-            WithdrawCommand = new RelayCommand(_ => Transaction.Withdraw(TransactionAmount));
+            get => _commentary;
+            set
+            {
+                _commentary = value;
+                OnPropertyChanged("Commentary");
+            }
         }
 
-        private void Put() => Transaction.Put(TransactionAmount);
+        // Creates new transaction
+        public static void CreateTransaction()
+        {
+            if (_operation < 0 || _operation > 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(_operation), "Operation index is out of range.");
+            }
+
+            try
+            {
+                if (_operation == 0)
+                {
+                    Transaction.Put(_transactionAmount, _commentary);
+                }
+                else if (_operation == 1)
+                {
+                    Transaction.Withdraw(_transactionAmount, _commentary);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         #region INotifyPropertyChanged realization
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

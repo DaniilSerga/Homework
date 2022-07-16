@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Homework.MVVM.ViewModel;
 
 namespace Homework.MVVM.View
 {
@@ -24,5 +25,7 @@ namespace Homework.MVVM.View
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e) => TransactionsVM.CreateTransaction();
     }
 }
