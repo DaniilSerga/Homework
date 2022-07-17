@@ -46,11 +46,14 @@ namespace Homework.MVVM.Model
 
             try
             {
-                SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionsDate, @Amount, '@Operation', N'@Commentary')", _sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@TransactionDate", DateTime.Now);
-                sqlCommand.Parameters.AddWithValue("@Amount", amount);
-                sqlCommand.Parameters.AddWithValue("@Operation", "Withdraw");
-                sqlCommand.Parameters.AddWithValue("@Commentary", commentary);
+                // Balance, RefreshDate
+                Wallet.UpdateBalance(amount, 1);
+
+                SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionDate, @Amount, @Operation, @Commentary)", _sqlConnection);
+                sqlCommand.Parameters.AddWithValue("TransactionDate", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("Amount", amount);
+                sqlCommand.Parameters.AddWithValue("Operation", "Withdraw");
+                sqlCommand.Parameters.AddWithValue("Commentary", commentary);
 
                 sqlCommand.ExecuteNonQuery();
 
@@ -87,11 +90,13 @@ namespace Homework.MVVM.Model
 
             try
             {
-                SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionsDate, @Amount, '@Operation', N'@Commentary')", _sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@TransactionDate", DateTime.Now);
-                sqlCommand.Parameters.AddWithValue("@Amount", amount);
-                sqlCommand.Parameters.AddWithValue("@Operation", "Put");
-                sqlCommand.Parameters.AddWithValue("@Commentary", commentary);
+                Wallet.UpdateBalance(amount, 0);
+
+                SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionDate, @Amount, @Operation, @Commentary)", _sqlConnection);
+                sqlCommand.Parameters.AddWithValue("TransactionDate", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("Amount", amount);
+                sqlCommand.Parameters.AddWithValue("Operation", "Put");
+                sqlCommand.Parameters.AddWithValue("Commentary", commentary);
 
                 sqlCommand.ExecuteNonQuery();
 

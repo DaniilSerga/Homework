@@ -37,13 +37,8 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Баланс:" FontSize="20" />
-                        <TextBlock Text="{}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Баланс:" FontSize="20" />
-                        <TextBlock Text="{}"/>
+                        <TextBlock Text="Последнее обновление:" FontSize="20" />
+                        <TextBlock Text="{Binding RecentBalanceRefresh}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

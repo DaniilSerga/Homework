@@ -64,7 +64,8 @@ namespace Homework.MVVM.ViewModel
         {
             if (_operation < 0 || _operation > 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(_operation), "Operation index is out of range.");
+                MessageBox.Show("Operation index is out of range.");
+                return;
             }
 
             try
@@ -83,6 +84,7 @@ namespace Homework.MVVM.ViewModel
                 MessageBox.Show(ex.Message);
             }
         }
+
         #region INotifyPropertyChanged realization
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

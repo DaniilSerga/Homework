@@ -6,9 +6,32 @@
       xmlns:local="clr-namespace:Homework.MVVM.View"
       mc:Ignorable="d" 
       d:DesignHeight="520" d:DesignWidth="828"
-      Title="BankStatement">
+      Title="BankStatement" Loaded="Page_Loaded">
 
     <Grid>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Состояние транзакций" Foreground="White" FontSize="18"/>
+                </TabItem.Header>
+                    
+                <DataGrid CanUserAddRows="False"
+                          SelectionUnit="Cell"
+                          SelectionMode="Extended"
+                          x:Name="TransactionsStatus"/>
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Состояние кошелька" Foreground="White" FontSize="18"/>
+                </TabItem.Header>
+
+                <DataGrid CanUserAddRows="False"
+                          SelectionUnit="Cell"
+                          SelectionMode="Extended"
+                          x:Name="WalletStatus"/>
+            </TabItem>
+        </TabControl>
         
     </Grid>
 </Page>
