@@ -38,7 +38,7 @@
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Последнее обновление:" FontSize="20" />
-                        <TextBlock Text="{Binding RecentBalanceRefresh}"/>
+                        <TextBlock Text="{Binding RecentBalanceRefresh, StringFormat=dd:MM:yyyy}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

@@ -3,12 +3,8 @@ using Homework.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace Homework.MVVM.ViewModel
 {
@@ -19,6 +15,7 @@ namespace Homework.MVVM.ViewModel
         private static int _operation;
         private static string _commentary;
 
+        #region Properties
         public DateTime TransactionDate
         {
             get => _transactionDate;
@@ -58,30 +55,22 @@ namespace Homework.MVVM.ViewModel
                 OnPropertyChanged("Commentary");
             }
         }
-
+        #endregion
+        
         // Creates new transaction
         public static void CreateTransaction()
         {
-            if (_operation < 0 || _operation > 1)
+            switch (_operation)
             {
-                MessageBox.Show("Operation index is out of range.");
-                return;
-            }
-
-            try
-            {
-                if (_operation == 0)
-                {
+                case 0: 
                     Transaction.Put(_transactionAmount, _commentary);
-                }
-                else if (_operation == 1)
-                {
+                    break;
+                case 1: 
                     Transaction.Withdraw(_transactionAmount, _commentary);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                    break;
+                default: 
+                    MessageBox.Show("Operation index is out of range.");
+                    return;
             }
         }
 

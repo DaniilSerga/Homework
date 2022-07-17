@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Homework.MVVM.Model;
 
 namespace Homework.MVVM.View
 {
@@ -22,15 +12,19 @@ namespace Homework.MVVM.View
     /// </summary>
     public partial class BankStatement : Page
     {
-        SqlConnection _sqlConnection = Model.Connection.GetConnection();
-
         public BankStatement()
         {
             InitializeComponent();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        // Fills DataGrid when page is loaded
+        private void Page_Loaded(object sender, RoutedEventArgs e) => FillDataGrid();
+
+        // Fills DataGrid with information from database
+        private void FillDataGrid()
         {
+            SqlConnection _sqlConnection = Model.Connection.GetConnection();
+
             FillWalletStatus();
             FillTransactionsStatus();
 

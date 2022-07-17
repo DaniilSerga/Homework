@@ -8,23 +8,9 @@ using System.Windows;
 
 namespace Homework.MVVM.Model
 {
-    public class Transaction : INotifyPropertyChanged
+    public class Transaction
     {
         private static readonly SqlConnection _sqlConnection = Connection.GetConnection();
-        public static DateTime TransactionDate { get; set; }
-        public static decimal TransactionAmount { get; set; }
-        public static string Operation { get; set; }
-        public static string Commentary { get; set; }
-
-        public Transaction(DateTime transactionDate, decimal transactionAmount, string operation, string commentary)
-        {
-            TransactionDate = transactionDate;
-            TransactionAmount = transactionAmount;
-            Operation = operation;
-            Commentary = commentary;
-        }
-
-        public Transaction() { }
 
         // Withdraws money from account
         public static void Withdraw(decimal amount, string commentary)
@@ -47,7 +33,10 @@ namespace Homework.MVVM.Model
             try
             {
                 // Balance, RefreshDate
-                Wallet.UpdateBalance(amount, 1);
+                if (Wallet.UpdateBalance(amount, 1) == false)
+                {
+                    return;
+                }
 
                 SqlCommand sqlCommand = new SqlCommand("INSERT INTO Transactions VALUES (@TransactionDate, @Amount, @Operation, @Commentary)", _sqlConnection);
                 sqlCommand.Parameters.AddWithValue("TransactionDate", DateTime.Now);
@@ -69,7 +58,6 @@ namespace Homework.MVVM.Model
             }
         }
 
-        // TODO Fix database query
         // Puts money in account
         public static void Put(decimal amount, string commentary)
         {
@@ -110,48 +98,6 @@ namespace Homework.MVVM.Model
             {
                 _sqlConnection.Close();
             }
-        }
-
-        // Gets all transactions
-        public static List<Transaction> GetAllTransactions()
-        {
-            if (_sqlConnection.State is ConnectionState.Closed)
-            {
-                _sqlConnection.Open();
-            }
-
-            List<Transaction> transactionsList = new List<Transaction>();
-
-            try
-            {
-                SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Transaction");
-                SqlDataReader dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        transactionsList.Add(new Transaction(dataReader.GetDateTime(0), dataReader.GetDecimal(1), dataReader.GetString(2), dataReader.GetString(3)));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                _sqlConnection.Close();
-            }
-
-            return transactionsList;
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

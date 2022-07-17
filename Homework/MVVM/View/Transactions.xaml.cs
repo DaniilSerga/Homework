@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Homework.MVVM.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Homework.MVVM.ViewModel;
 
 namespace Homework.MVVM.View
 {
@@ -26,6 +14,7 @@ namespace Homework.MVVM.View
             InitializeComponent();
         }
 
+        // I didn't have enough time to understand how bind button clicks, so that's what I've done
         private void Button_Click(object sender, RoutedEventArgs e) => TransactionsVM.CreateTransaction();
     }
 }

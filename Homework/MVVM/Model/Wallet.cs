@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Homework.MVVM.Model
 {
-    internal class Wallet : INotifyPropertyChanged
+    internal class Wallet
     {
-        private static readonly SqlConnection _sqlConnection = Connection.SqlConnection;
+        private static readonly SqlConnection _sqlConnection = Connection.GetConnection();
 
-        // TODO Gets current balance
+        // Gets current balance
         public static decimal GetCurrentBalance()
         {
             if (_sqlConnection.State is ConnectionState.Closed)
@@ -27,7 +23,7 @@ namespace Homework.MVVM.Model
 
             try
             {
-                SqlCommand sqlCommand = new SqlCommand("SELECT Balance FROM Wallet ORDER BY RefreshDate DESC", _sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand("SELECT Balance FROM Wallet", _sqlConnection);
 
                 SqlDataReader dataReader = sqlCommand.ExecuteReader();
 
@@ -50,11 +46,12 @@ namespace Homework.MVVM.Model
                 _sqlConnection.Close();
             }
 
-            return balances[0];
+            return balances[^1];
         }
 
-        // Updates wallet balance
-        public static void UpdateBalance(decimal amount, int operation)
+        // Updates wallet balance (Puts or Withdraws money from a wallet, depending on chosen operation)
+        // 0 - Put, 1 - Withdraw
+        public static bool UpdateBalance(decimal amount, int operation)
         {
             if (amount < 0)
             {
@@ -89,8 +86,10 @@ namespace Homework.MVVM.Model
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                return;
+                return false;
             }
+
+            return true;
         }
 
         // Gets recent balance refresh date
@@ -128,13 +127,5 @@ namespace Homework.MVVM.Model
 
             return balanceRefreshes[0];
         }
-
-        #region INotifyPropertyChanged realization
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-        #endregion
     }
 }
